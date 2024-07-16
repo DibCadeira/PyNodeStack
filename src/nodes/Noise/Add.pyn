@@ -1,0 +1,14 @@
+!desc - String - this is a string
+!factor - Number - 26.8
+!distortion - Boolean - False
+!list - Dropdown[slow, fast] - slow
+!average - Slider[0, 1] - 0.5
+!color - Colorpicker - #ff8942
+
+compute
+print("Hello, world!")
+
+def deep():
+    print("hello, deep web")
+    
+deep()

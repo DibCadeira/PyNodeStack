@@ -1,0 +1,40 @@
+{
+    "Add": {
+        "category": "Noise",
+        "view": [
+            {
+                "widget": "String"
+            },
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Boolean"
+            },
+            {
+                "widget": "Dropdown",
+                "items": [
+                    "slow",
+                    "fast"
+                ]
+            },
+            {
+                "widget": "Slider",
+                "min": 0.0,
+                "max": 1.0
+            },
+            {
+                "widget": "Colorpicker"
+            }
+        ],
+        "data": [
+            "this is a string",
+            26.8,
+            true,
+            "slow",
+            0.5,
+            "#ff8942"
+        ],
+        "compute": "\nprint(\"Hello, world!\")\n\ndef deep():\n    print(\"hello, deep web\")\n    \ndeep()"
+    }
+}
