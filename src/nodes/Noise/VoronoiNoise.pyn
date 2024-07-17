@@ -1,0 +1,25 @@
+!width - Number - 256
+!height - Number - 256
+!scale - Number - 10.0
+!num_points - Number - 10
+
+compute
+import numpy as np
+
+# Generate grid points
+x = np.linspace(0, scale, width, endpoint=False)
+y = np.linspace(0, scale, height, endpoint=False)
+X, Y = np.meshgrid(x, y)
+
+# Generate random seed points
+points = np.random.rand(num_points, 2) * scale
+
+# Calculate distance to nearest seed point for each pixel
+distances = np.zeros((height, width))
+for i in range(num_points):
+    distances += np.sqrt((X - points[i, 0])**2 + (Y - points[i, 1])**2)
+
+# Normalize distances to [0, 1]
+value = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))
+
+push(value)

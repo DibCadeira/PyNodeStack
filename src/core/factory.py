@@ -8,7 +8,7 @@ class Factory:
     @staticmethod
     def create(name: str):
         base_node = NODES[name]
-        return Node(base_node["data"], base_node["view"], base_node["compute"])
+        return Node(name, base_node["data"], base_node["view"], base_node["compute"])
 
     @staticmethod
     def preload(path):

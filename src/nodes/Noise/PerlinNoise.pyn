@@ -1,0 +1,40 @@
+!width - Number - 256
+!height - Number - 256
+!scale - Number - 10.0
+
+compute
+import numpy as np
+
+# Generate grid points
+x = np.linspace(0, scale, width, endpoint=False)
+y = np.linspace(0, scale, height, endpoint=False)
+X, Y = np.meshgrid(x, y)
+
+# Random gradients
+gradients = np.random.randn(width, height, 2)
+
+# Integer grid coordinates
+x0 = X.astype(int)
+y0 = Y.astype(int)
+
+# Fractional part
+xf = X - x0
+yf = Y - y0
+
+# Dot products
+dot_top_left = np.einsum('ijk,ijk->ij', gradients[x0, y0], np.stack([xf, yf], axis=-1))
+dot_top_right = np.einsum('ijk,ijk->ij', gradients[x0 + 1, y0], np.stack([xf - 1, yf], axis=-1))
+dot_bottom_left = np.einsum('ijk,ijk->ij', gradients[x0, y0 + 1], np.stack([xf, yf - 1], axis=-1))
+dot_bottom_right = np.einsum('ijk,ijk->ij', gradients[x0 + 1, y0 + 1], np.stack([xf - 1, yf - 1], axis=-1))
+
+# Interpolation weights
+u = xf ** 3 * (xf * (xf * 6 - 15) + 10)
+v = yf ** 3 * (yf * (yf * 6 - 15) + 10)
+
+# Interpolated values
+value = (1 - u) * (1 - v) * dot_top_left + \
+   (1 - u) * v * dot_bottom_left + \
+   u * (1 - v) * dot_top_right + \
+   u * v * dot_bottom_right
+
+push(value)

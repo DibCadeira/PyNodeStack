@@ -8,15 +8,24 @@ class NodeStack:
 
     def add(self, node: str):
         self.nodes.append(Factory.create(node))
+        return self.nodes[-1]
 
-    def set_data(self, index: int, data: list):
-        self.nodes[index].data = data
+    def set_node_data(self, index: int, data: dict):
+        node = self.nodes[index]
+        node.data = node.data | data
+
+    def push(self, data):
+        self.stack.append(data)
+
+    def pop(self):
+        return self.stack.pop()
 
     def remove(self, index):
         self.nodes.pop(index)
 
     def eval(self):
         for node in self.nodes:
-            node.eval(self.stack)
+            print(f"Computing >> {node.name}")
+            node.eval({"push": self.push, "pop": self.pop})
 
         return self.stack[0]

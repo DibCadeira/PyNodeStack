@@ -1,0 +1,2 @@
+class NodeWidget:
+    pass

@@ -1,0 +1,10 @@
+!path - String - texlab.jpg
+
+compute
+import numpy as np
+from PIL import Image
+
+img = Image.fromarray((pop() * 255).astype(np.uint8))
+img.save(path)
+
+push(img)
