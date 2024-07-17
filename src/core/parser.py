@@ -1,6 +1,6 @@
 def parse(folder, source: str) -> dict:
     lines = source.splitlines()
-    node = {"category": folder, "view": [], "data": [], "compute": ""}
+    node = {"category": folder, "view": [], "data": {}, "compute": ""}
 
     for i in range(len(lines)):
         line = lines[i]
@@ -15,31 +15,36 @@ def parse(folder, source: str) -> dict:
 
 def _parse_data(node, string):
     string = string.split("-")
+    name = string[0].strip().replace("!", "")
     widget = string[1].strip()
     value = string[2].strip()
 
     if "String" in widget:
-        node["data"].append(value)
+        node["data"][name] = value
         _parse_string_widget(node, widget)
 
     elif "Number" in widget:
-        node["data"].append(float(value))
+        if "." in value:
+            node["data"][name] = float(value)
+        else:
+            node["data"][name] = int(value)
+
         _parse_number_widget(node, widget)
 
     elif "Boolean" in widget:
-        node["data"].append(bool(value))
+        node["data"][name] = bool(value)
         _parse_boolean_widget(node, widget)
 
     elif "Dropdown" in widget:
-        node["data"].append(value)
+        node["data"][name] = value
         _parse_dropdown_widget(node, widget)
 
     elif "Slider" in widget:
-        node["data"].append(float(value))
+        node["data"][name] = float(value)
         _parse_slider_widget(node, widget)
 
     elif "Colorpicker" in widget:
-        node["data"].append(value)
+        node["data"][name] = value
         _parse_colorpicker_widget(node, widget)
 
 

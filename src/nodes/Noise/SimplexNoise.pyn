@@ -1,0 +1,10 @@
+import numpy as np
+import noise
+
+value = np.zeros((height, width))
+
+for y in range(height):
+    for x in range(width):
+        value[y, x] = noise.snoise2(x / scale, y / scale, octaves=6, persistence=0.5, lacunarity=2.0, repeatx=1024, repeaty=1024, base=0)
+
+push(value)

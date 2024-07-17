@@ -1,40 +1,94 @@
 {
-    "Add": {
+    "CellularNoise": {
         "category": "Noise",
         "view": [
             {
-                "widget": "String"
+                "widget": "Number"
             },
             {
                 "widget": "Number"
             },
             {
-                "widget": "Boolean"
+                "widget": "Number"
             },
             {
-                "widget": "Dropdown",
-                "items": [
-                    "slow",
-                    "fast"
-                ]
-            },
-            {
-                "widget": "Slider",
-                "min": 0.0,
-                "max": 1.0
-            },
-            {
-                "widget": "Colorpicker"
+                "widget": "Number"
             }
         ],
-        "data": [
-            "this is a string",
-            26.8,
-            true,
-            "slow",
-            0.5,
-            "#ff8942"
+        "data": {
+            "width": 256,
+            "height": 256,
+            "scale": 10.0,
+            "num_points": 10
+        },
+        "compute": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Generate random seed points\npoints = np.random.rand(num_points, 2) * scale\n\n# Calculate distance to nearest and second nearest seed points for each pixel\ndistances1 = np.zeros((height, width)) + np.inf\ndistances2 = np.zeros((height, width)) + np.inf\n\nfor i in range(num_points):\n    dx = X - points[i, 0]\n    dy = Y - points[i, 1]\n    dist = np.sqrt(dx**2 + dy**2)\n\n    # Update nearest and second nearest distances\n    mask = dist < distances1\n    distances2[mask] = distances1[mask]\n    distances1[mask] = dist[mask]\n\n# Normalize distances to [0, 1]\nvalue = (distances1 - np.min(distances1)) / (np.max(distances1) - np.min(distances1))\n\npush(value)"
+    },
+    "FBMNoise": {
+        "category": "Noise",
+        "view": [],
+        "data": {},
+        "compute": ""
+    },
+    "PerlinNoise": {
+        "category": "Noise",
+        "view": [
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Number"
+            }
         ],
-        "compute": "\nprint(\"Hello, world!\")\n\ndef deep():\n    print(\"hello, deep web\")\n    \ndeep()"
+        "data": {
+            "width": 256,
+            "height": 256,
+            "scale": 10.0
+        },
+        "compute": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Random gradients\ngradients = np.random.randn(width, height, 2)\n\n# Integer grid coordinates\nx0 = X.astype(int)\ny0 = Y.astype(int)\n\n# Fractional part\nxf = X - x0\nyf = Y - y0\n\n# Dot products\ndot_top_left = np.einsum('ijk,ijk->ij', gradients[x0, y0], np.stack([xf, yf], axis=-1))\ndot_top_right = np.einsum('ijk,ijk->ij', gradients[x0 + 1, y0], np.stack([xf - 1, yf], axis=-1))\ndot_bottom_left = np.einsum('ijk,ijk->ij', gradients[x0, y0 + 1], np.stack([xf, yf - 1], axis=-1))\ndot_bottom_right = np.einsum('ijk,ijk->ij', gradients[x0 + 1, y0 + 1], np.stack([xf - 1, yf - 1], axis=-1))\n\n# Interpolation weights\nu = xf ** 3 * (xf * (xf * 6 - 15) + 10)\nv = yf ** 3 * (yf * (yf * 6 - 15) + 10)\n\n# Interpolated values\nvalue = (1 - u) * (1 - v) * dot_top_left + \\\n   (1 - u) * v * dot_bottom_left + \\\n   u * (1 - v) * dot_top_right + \\\n   u * v * dot_bottom_right\n\npush(value)"
+    },
+    "SimplexNoise": {
+        "category": "Noise",
+        "view": [],
+        "data": {},
+        "compute": ""
+    },
+    "VoronoiNoise": {
+        "category": "Noise",
+        "view": [
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Number"
+            },
+            {
+                "widget": "Number"
+            }
+        ],
+        "data": {
+            "width": 256,
+            "height": 256,
+            "scale": 10.0,
+            "num_points": 10
+        },
+        "compute": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Generate random seed points\npoints = np.random.rand(num_points, 2) * scale\n\n# Calculate distance to nearest seed point for each pixel\ndistances = np.zeros((height, width))\nfor i in range(num_points):\n    distances += np.sqrt((X - points[i, 0])**2 + (Y - points[i, 1])**2)\n\n# Normalize distances to [0, 1]\nvalue = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))\n\nprint(\"Voronoi\")\npush(value)"
+    },
+    "Image": {
+        "category": "Texture",
+        "view": [
+            {
+                "widget": "String"
+            }
+        ],
+        "data": {
+            "path": "texlab.png"
+        },
+        "compute": "\nimport numpy as np\nfrom PIL import Image\n\nimg = Image.fromarray((pop() * 255).astype(np.uint8))\nimg.save(path)\n\npush(img)"
     }
 }

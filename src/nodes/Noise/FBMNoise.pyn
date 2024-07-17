@@ -1,0 +1,14 @@
+import numpy as np
+import noise
+
+value = np.zeros((height, width))
+freq = 1.0
+amplitude = 1.0
+
+for y in range(height):
+    for x in range(width):
+        value[y, x] = noise.pnoise2(x / scale * freq, y / scale * freq, octaves=6) * amplitude
+        freq *= 2.0
+        amplitude *= 0.5
+
+push(value)

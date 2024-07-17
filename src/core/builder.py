@@ -23,3 +23,7 @@ def build(output: str):
 
     with open(output, "w") as file:
         json.dump(packages, file, indent=4)
+
+
+if __name__ == "__main__":
+    build("nodes.json")
