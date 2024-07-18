@@ -1,0 +1,11 @@
+!source - String - Hello
+
+compute
+import numpy as np
+
+image = pop()
+height, width = image.shape
+
+rgba_image = np.dstack((image, np.full((height, width), 255, dtype=np.uint8)))
+linear_rgba_image = rgba_image.flatten()
+push(linear_rgba_image.tolist())
