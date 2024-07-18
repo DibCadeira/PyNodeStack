@@ -21,7 +21,7 @@ def _parse_data(node, string):
 
     if "String" in widget:
         node["data"][name] = value
-        _parse_string_widget(node, widget)
+        _parse_string_widget(node, name, widget)
 
     elif "Number" in widget:
         if "." in value:
@@ -29,23 +29,23 @@ def _parse_data(node, string):
         else:
             node["data"][name] = int(value)
 
-        _parse_number_widget(node, widget)
+        _parse_number_widget(node, name, widget)
 
     elif "Boolean" in widget:
         node["data"][name] = bool(value)
-        _parse_boolean_widget(node, widget)
+        _parse_boolean_widget(node, name, widget)
 
     elif "Dropdown" in widget:
         node["data"][name] = value
-        _parse_dropdown_widget(node, widget)
+        _parse_dropdown_widget(node, name, widget)
 
     elif "Slider" in widget:
         node["data"][name] = float(value)
-        _parse_slider_widget(node, widget)
+        _parse_slider_widget(node, name, widget)
 
     elif "Colorpicker" in widget:
         node["data"][name] = value
-        _parse_colorpicker_widget(node, widget)
+        _parse_colorpicker_widget(node, name, widget)
 
 
 def _parse_compute(data, lines):
@@ -63,31 +63,33 @@ def _parse_compute(data, lines):
     data["compute"] = compute
 
 
-def _parse_string_widget(node, widget):
-    node["view"].append({"widget": "String"})
+def _parse_string_widget(node, name, widget):
+    node["view"].append({"name": name, "widget": "String", })
 
 
-def _parse_number_widget(node, widget):
-    node["view"].append({"widget": "Number"})
+def _parse_number_widget(node, name, widget):
+    node["view"].append({"name": name, "widget": "Number"})
 
 
-def _parse_boolean_widget(node, widget):
-    node["view"].append({"widget": "Boolean"})
+def _parse_boolean_widget(node, name, widget):
+    node["view"].append({"name": name, "widget": "Boolean"})
 
 
-def _parse_dropdown_widget(node, widget):
+def _parse_dropdown_widget(node, name, widget):
     items = widget.replace("Dropdown[", "").replace("]", "")
     items = [item.strip() for item in items.split(",")]
 
-    node["view"].append({"widget": "Dropdown", "items": items})
+    node["view"].append({"name": name, "widget": "Dropdown", "items": items})
 
 
-def _parse_slider_widget(node, widget):
+def _parse_slider_widget(node, name, widget):
     values = widget.replace("Slider[", "").replace("]", "")
     values = [float(value.strip()) for value in values.split(",")]
 
-    node["view"].append({"widget": "Slider", "min": values[0], "max": values[1]})
+    node["view"].append(
+        {"name": name, "widget": "Slider", "min": values[0], "max": values[1]}
+    )
 
 
-def _parse_colorpicker_widget(node, widget):
-    node["view"].append({"widget": "Colorpicker"})
+def _parse_colorpicker_widget(node, name, widget):
+    node["view"].append({"name": name, "widget": "Colorpicker"})

@@ -1,23 +1,40 @@
 {
+    "EditableImage": {
+        "category": "Converter",
+        "view": [
+            {
+                "name": "source",
+                "widget": "String"
+            }
+        ],
+        "data": {
+            "source": "Hello"
+        },
+        "compute": "\nimport numpy as np\n\nimage = pop()\nheight, width, channels = image.shape\n\nrgba_image = np.dstack((image, np.full((height, width), 255, dtype=np.uint8)))\nlinear_rgba_image = rgba_image.flatten()\npush(linear_rgba_image.tolist())"
+    },
     "CellularNoise": {
         "category": "Noise",
         "view": [
             {
+                "name": "width",
                 "widget": "Number"
             },
             {
+                "name": "height",
                 "widget": "Number"
             },
             {
+                "name": "scale",
                 "widget": "Number"
             },
             {
+                "name": "num_points",
                 "widget": "Number"
             }
         ],
         "data": {
-            "width": 256,
-            "height": 256,
+            "width": 25,
+            "height": 25,
             "scale": 10.0,
             "num_points": 10
         },
@@ -33,12 +50,15 @@
         "category": "Noise",
         "view": [
             {
+                "name": "width",
                 "widget": "Number"
             },
             {
+                "name": "height",
                 "widget": "Number"
             },
             {
+                "name": "scale",
                 "widget": "Number"
             }
         ],
@@ -59,15 +79,19 @@
         "category": "Noise",
         "view": [
             {
+                "name": "width",
                 "widget": "Number"
             },
             {
+                "name": "height",
                 "widget": "Number"
             },
             {
+                "name": "scale",
                 "widget": "Number"
             },
             {
+                "name": "num_points",
                 "widget": "Number"
             }
         ],
@@ -77,17 +101,18 @@
             "scale": 10.0,
             "num_points": 10
         },
-        "compute": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Generate random seed points\npoints = np.random.rand(num_points, 2) * scale\n\n# Calculate distance to nearest seed point for each pixel\ndistances = np.zeros((height, width))\nfor i in range(num_points):\n    distances += np.sqrt((X - points[i, 0])**2 + (Y - points[i, 1])**2)\n\n# Normalize distances to [0, 1]\nvalue = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))\n\nprint(\"Voronoi\")\npush(value)"
+        "compute": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Generate random seed points\npoints = np.random.rand(num_points, 2) * scale\n\n# Calculate distance to nearest seed point for each pixel\ndistances = np.zeros((height, width))\nfor i in range(num_points):\n    distances += np.sqrt((X - points[i, 0])**2 + (Y - points[i, 1])**2)\n\n# Normalize distances to [0, 1]\nvalue = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))\n\npush(value)"
     },
     "Image": {
         "category": "Texture",
         "view": [
             {
+                "name": "path",
                 "widget": "String"
             }
         ],
         "data": {
-            "path": "texlab.png"
+            "path": "texlab.jpg"
         },
         "compute": "\nimport numpy as np\nfrom PIL import Image\n\nimg = Image.fromarray((pop() * 255).astype(np.uint8))\nimg.save(path)\n\npush(img)"
     }
