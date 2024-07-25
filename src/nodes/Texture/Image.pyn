@@ -1,6 +1,6 @@
-!path - String - texlab.jpg
+@path - String - image.png
 
-compute
+exec
 import numpy as np
 from PIL import Image
 

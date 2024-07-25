@@ -1,10 +1,12 @@
-# TexLab
-
-TexLab is a ***Node Stack Based Procedural Texture Generator***.
+# TexLab is a "Node Stack Based Procedural Texture Generator".
 
 ### Getting started
 
+#### Virtual Enviorement
     virtualenv venv
-    pip install numpy
 
-    python build.py
+#### Installing Dependencies
+    pip install -r requirements.txt
+
+#### Bundling
+    python bundler.py

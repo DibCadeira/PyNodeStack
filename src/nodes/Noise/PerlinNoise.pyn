@@ -1,8 +1,8 @@
-!width - Number - 256
-!height - Number - 256
-!scale - Number - 10.0
+@width - Number - 256
+@height - Number - 256
+@scale - Number - 10.0
 
-compute
+exec
 import numpy as np
 
 # Generate grid points

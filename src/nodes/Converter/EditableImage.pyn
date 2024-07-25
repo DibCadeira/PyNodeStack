@@ -1,8 +1,5 @@
-!source - String - Hello
-
-compute
+exec
 import numpy as np
-
 image = pop()
 height, width = image.shape
 
