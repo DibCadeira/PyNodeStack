@@ -1,0 +1,9 @@
+@path - String - tex.png
+
+exec
+from PIL import Image
+import numpy as np
+
+image = Image.open(path)
+np_image = np.array(image)
+push(np_image)

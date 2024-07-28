@@ -1,0 +1,7 @@
+@path - String - image.png
+
+exec
+from PIL import Image
+
+img = Image.fromarray(pop())
+img.save(path)

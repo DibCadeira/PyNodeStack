@@ -1,4 +1,18 @@
 {
+    "Mask": {
+        "category": "Blend",
+        "ui": [],
+        "data": {},
+        "src": "\nfrom PIL import Image\nimport numpy as np\n\nmask = pop()\nimage = pop()\n\nbinary_mask = (mask > 127).astype(np.uint8)\nbinary_mask_3d = np.stack([binary_mask] * 3, axis=-1)\n\nmasked_image = image * binary_mask_3d\n\npush(masked_image)",
+        "name": "Mask"
+    },
+    "Multiply": {
+        "category": "Blend",
+        "ui": [],
+        "data": {},
+        "src": "\nimport numpy as np\n\npush(np.clip((pop() / 255.0) * (pop() / 255.0) * 255.0, 0, 255).astype(np.uint8))",
+        "name": "Multiply"
+    },
     "EditableImage": {
         "category": "Converter",
         "ui": [],
@@ -27,8 +41,8 @@
             }
         ],
         "data": {
-            "width": 25,
-            "height": 25,
+            "width": 256,
+            "height": 256,
             "scale": 10.0,
             "num_points": 10
         },
@@ -102,7 +116,21 @@
         "src": "\nimport numpy as np\n\n# Generate grid points\nx = np.linspace(0, scale, width, endpoint=False)\ny = np.linspace(0, scale, height, endpoint=False)\nX, Y = np.meshgrid(x, y)\n\n# Generate random seed points\npoints = np.random.rand(num_points, 2) * scale\n\n# Calculate distance to nearest seed point for each pixel\ndistances = np.zeros((height, width))\nfor i in range(num_points):\n    distances += np.sqrt((X - points[i, 0])**2 + (Y - points[i, 1])**2)\n\n# Normalize distances to [0, 1]\nvalue = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))\n\npush(value)",
         "name": "VoronoiNoise"
     },
-    "Image": {
+    "LoadImage": {
+        "category": "Texture",
+        "ui": [
+            {
+                "name": "path",
+                "widget": "String"
+            }
+        ],
+        "data": {
+            "path": "tex.png"
+        },
+        "src": "\nfrom PIL import Image\nimport numpy as np\n\nimage = Image.open(path)\nnp_image = np.array(image)\npush(np_image)",
+        "name": "LoadImage"
+    },
+    "SaveImage": {
         "category": "Texture",
         "ui": [
             {
@@ -113,7 +141,7 @@
         "data": {
             "path": "image.png"
         },
-        "src": "\nimport numpy as np\nfrom PIL import Image\n\nimg = Image.fromarray((pop() * 255).astype(np.uint8))\nimg.save(path)\n\npush(img)",
-        "name": "Image"
+        "src": "\nfrom PIL import Image\n\nimg = Image.fromarray(pop())\nimg.save(path)",
+        "name": "SaveImage"
     }
 }

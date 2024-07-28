@@ -1,8 +1,13 @@
 from src.core.nstack import NodeStack
 
 nstack = NodeStack()
-nstack.insert("CellularNoise", {"width": 256, "height": 256, "num_points": 32, "scale": 2})
-nstack.insert("Image", { "path": "TexLabPro.jpg"})
-#nstack.insert("EditableImage")
+# nstack.insert("LoadImage", {"path": "./assets/mask.jpg"})
+# nstack.insert("LoadImage", {"path": "./assets/pug.jpg"})
 
-print(type(nstack.eval()[0]))
+nstack.insert("CellularNoise", {"num_points": 32, "scale": 3})
+nstack.insert("PerlinNoise")
+nstack.insert("Multiply")
+nstack.insert("SaveImage", {"path": "noise_mul.jpg"})
+# nstack.insert("EditableImage")
+
+nstack.eval()

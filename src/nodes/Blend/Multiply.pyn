@@ -1,0 +1,4 @@
+exec
+import numpy as np
+
+push(np.clip((pop() / 255.0) * (pop() / 255.0) * 255.0, 0, 255).astype(np.uint8))

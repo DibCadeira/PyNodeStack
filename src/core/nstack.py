@@ -34,8 +34,11 @@ class NodeStack:
 
     def eval(self):
         for node in self.nodes:
-            print(f">> {node.name}")
-            node.eval({"push": self.push, "pop": self.pop})
+            try:
+                print(f"-> {node.name}")
+                node.eval({"push": self.push, "pop": self.pop})
+            except Exception as e:
+                print(node.name, e)
 
         return self.stack
 
